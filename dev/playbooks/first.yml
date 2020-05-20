@@ -1,0 +1,8 @@
+########Myfirst Playbook ############
+---
+- hosts: servers
+  remote_user: admin
+  become: true
+  become_method: sudo
+  tasks:
+  - ping: 

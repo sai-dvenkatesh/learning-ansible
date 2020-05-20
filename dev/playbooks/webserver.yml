@@ -1,0 +1,12 @@
+---
+- hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+
+  tasks:
+  - yum: name=httpd state=present
+    when: ansible_distribution == "Amazon"
+  - service: name=httpd state=started
+    when: ansible_distribution == "Amazon"
+  

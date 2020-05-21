@@ -3,10 +3,34 @@
   remote_user: admin
   become: true
   become_method: sudo
-
   tasks:
-  - yum: name=httpd state=present
-    when: ansible_distribution == "Amazon"
-  - service: name=httpd state=started
-    when: ansible_distribution == "Amazon"
-  
+  - name: "Installs Package"
+    yum:
+      name: httpd
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name:  "start httpd"
+    service:
+      name: httpd
+      state: started
+    when: ansible_os_family == "RedHat"  
+  - name:  "install httpd"
+    apt:
+      name: apache2
+      state: present
+    when: ansible_os_family == "Debian"  
+  - name:  "start httpd"
+    service:
+      name: apache2
+      state: started
+    when: ansible_os_family == "Debian"  
+
+  - name: "copy index.html"
+    copy:
+      src: /home/ansible/index.html
+      dest: /var/www/html/
+      owner: root
+      group: root
+      mode: 644
+    when: ansible_os_family == "RedHat"  
+

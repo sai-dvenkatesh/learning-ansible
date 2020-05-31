@@ -1,3 +1,14 @@
 [servers]
-node1.example.com
-node2.example.com
+node1.example.com  user=tony
+node3.example.com  user=jam
+node2.example.com  user=ram
+
+
+[webservers]
+node1.example.com  
+node3.example.com 
+
+[webservers:vars]
+package_name=finger
+
+

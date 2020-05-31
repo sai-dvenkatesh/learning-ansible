@@ -1,0 +1,41 @@
+---
+- hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+  vars:
+    - package1_name: httpd
+    - service1_name: httpd
+    - package2_name: apache2
+    - service2_name: apache2
+  tasks:
+  - name: "Installs Package"
+    yum:
+      name: "{{ package1_name }}"
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name:  "start httpd"
+    service:
+      name: "{{ service1_name }}"
+      state: started
+    when: ansible_os_family == "RedHat"  
+  - name:  "install httpd"
+    apt:
+      name: "{{ package2_name }}"
+      state: present
+    when: ansible_os_family == "Debian"  
+  - name:  "start httpd"
+    service:
+      name: "{{ service2_name }}"
+      state: started
+    when: ansible_os_family == "Debian"  
+
+  - name: "copy index.html"
+    copy:
+      src: /home/ansible/index.html
+      dest: /var/www/html/
+      owner: root
+      group: root
+      mode: 644
+    when: ansible_os_family == "RedHat"  
+

@@ -1,0 +1,45 @@
+---
+- name: create virtualhost
+  hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+
+  tasks:
+    - name: configure centos for virtual hosting
+      tags: centos-hosting
+      blockinfile:
+        path: /etc/httpd/conf/httpd.conf
+        block: |
+          <virtualhost {{ ansible_hostname }}1.example.com:80>
+          servername {{ ansible_hostname }}1
+          documentroot /var/www/
+          </virtualhost> 
+      notify: restart the httpd
+      when: ansible_os_family == "RedHat"
+
+    - name: configure ubuntu for virtual hosting
+      tags: ubuntu-hosting
+      blockinfile:
+        path: /etc/apache2/apache2.conf
+        block: |
+          <virtualhost {{ ansible_hostname }}1.example.com:80>
+          servername {{ ansible_hostname }}1
+          documentroot /var/www/
+          </virtualhost> 
+      notify: restart the apache2
+      when: ansible_os_family == "Debian"
+  
+  handlers: 
+    - name: restart the httpd
+      service:
+        name: httpd
+        enabled: yes
+        state: restarted
+      when: ansible_os_family == "RedHat"
+ 
+    - name: restart the apache2
+      service: 
+        name: apache2
+        enabled: yes
+        state: restarted

@@ -1,0 +1,15 @@
+---
+- hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+  
+  vars:
+   user: joe
+
+  tasks:
+    - name: creating "{{ user }}"
+      user:
+        name: "{{ user }}"
+        state: present
+        shell: /bin/bash

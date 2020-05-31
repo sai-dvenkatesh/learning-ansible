@@ -1,0 +1,27 @@
+---
+- hosts: all
+  remote_user: admin
+  become: true
+  become_method: sudo
+
+  tasks:
+  - name: Install a package {{ package_name }}
+    yum:
+      name: "{{ package_name }} "
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name: install a package {{ package_name }}
+    apt:
+     name: "{{  package_name }}"
+     state: present
+    when: ansible_os_family == "Debian"
+  - name: Install a package {{ package_name }}
+    yum:
+      name: "{{ name }} "
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name: Install a package {{ package_name }}
+    yum:
+      name: "{{ name }} "
+      state: present
+    when: ansible_os_family == "RedHat"
